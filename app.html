@@ -1,0 +1,432 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Snake | Mini Web App</title>
+  <style>
+    :root{
+      --bg: #fbfbfd;
+      --card: rgba(255,255,255,.72);
+      --border: rgba(20,20,40,.10);
+      --text: #101018;
+      --muted: rgba(16,16,24,.65);
+      --accent: #f4b3c2; /* peachy */
+      --shadow: 0 14px 50px rgba(10,10,20,.08);
+      --radius: 18px;
+    }
+
+    *{ box-sizing:border-box; }
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color: var(--text);
+      background: radial-gradient(900px 500px at 20% 10%, rgba(244,179,194,.35), transparent 60%),
+                  radial-gradient(900px 500px at 90% 20%, rgba(180,220,255,.35), transparent 60%),
+                  var(--bg);
+      min-height: 100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding: 24px;
+    }
+
+    .wrap{
+      width: min(980px, 100%);
+      display:grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+
+    .top{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 12px;
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap: 10px;
+      font-weight: 700;
+      letter-spacing: .2px;
+    }
+    .dot{
+      width: 12px; height: 12px; border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 0 6px rgba(244,179,194,.28);
+    }
+
+    .links a{
+      text-decoration:none;
+      color: var(--muted);
+      padding: 8px 10px;
+      border-radius: 999px;
+    }
+    .links a:hover{ background: rgba(0,0,0,.04); color: var(--text); }
+
+    .grid{
+      display:grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap: 16px;
+    }
+
+    .card{
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+      padding: 18px;
+    }
+
+    h1{ font-size: 24px; margin: 0 0 8px; }
+    p{ margin: 0; color: var(--muted); }
+
+    canvas{
+      width: 100%;
+      max-width: 560px;
+      aspect-ratio: 1 / 1;
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,.55);
+      display:block;
+      margin-top: 14px;
+    }
+
+    .stats{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 12px;
+    }
+    .stat{
+      padding: 12px;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      background: rgba(255,255,255,.6);
+    }
+    .stat .label{ font-size: 12px; color: var(--muted); }
+    .stat .value{ font-size: 18px; font-weight: 700; margin-top: 2px; }
+
+    .controls{
+      display:grid;
+      gap: 10px;
+      margin-top: 14px;
+    }
+    .btn{
+      appearance:none;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,.75);
+      border-radius: 14px;
+      padding: 10px 12px;
+      font-weight: 600;
+      cursor:pointer;
+    }
+    .btn:hover{ background: rgba(255,255,255,.92); }
+    .btn.primary{
+      background: rgba(244,179,194,.55);
+      border-color: rgba(244,179,194,.55);
+    }
+
+    .pad{
+      display:grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 8px;
+      margin-top: 10px;
+    }
+    .pad button{
+      padding: 10px 0;
+    }
+    .pad .blank{
+      border: 0; background: transparent;
+    }
+
+    .hint{
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 10px;
+      line-height: 1.4;
+    }
+
+    @media (max-width: 860px){
+      .grid{ grid-template-columns: 1fr; }
+      canvas{ max-width: 100%; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <div class="top">
+      <div class="brand"><span class="dot"></span> Snake Game (AI + custom polish)</div>
+      <div class="links">
+        <a href="scratch.html">Scratch</a>
+        <a href="resume.html">Résumé</a>
+        <a href="index.html">Home</a>
+      </div>
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <h1>Snake</h1>
+        <p>Arrow keys to move. Eat food, don’t hit walls or yourself.</p>
+
+        <canvas id="game" width="560" height="560"></canvas>
+
+        <div class="stats">
+          <div class="stat">
+            <div class="label">Score</div>
+            <div class="value" id="score">0</div>
+          </div>
+          <div class="stat">
+            <div class="label">Best</div>
+            <div class="value" id="best">0</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h1>Controls</h1>
+        <p class="muted">Mobile-friendly buttons included.</p>
+
+        <div class="controls">
+          <button class="btn primary" id="startBtn">Start / Restart</button>
+          <button class="btn" id="pauseBtn">Pause</button>
+          <button class="btn" id="speedBtn">Speed: Normal</button>
+        </div>
+
+        <div class="pad" aria-label="directional pad">
+          <button class="btn blank" disabled></button>
+          <button class="btn" data-dir="U">↑</button>
+          <button class="btn blank" disabled></button>
+
+          <button class="btn" data-dir="L">←</button>
+          <button class="btn" data-dir="D">↓</button>
+          <button class="btn" data-dir="R">→</button>
+        </div>
+
+        <div class="hint">
+          <strong>Extra polish:</strong> soft aesthetic, speed toggle, local best score, mobile controls.
+          This keeps the app “beyond basic.”
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ---- Snake Game (single-file web app) ----
+    const canvas = document.getElementById("game");
+    const ctx = canvas.getContext("2d");
+
+    const scoreEl = document.getElementById("score");
+    const bestEl = document.getElementById("best");
+
+    const startBtn = document.getElementById("startBtn");
+    const pauseBtn = document.getElementById("pauseBtn");
+    const speedBtn = document.getElementById("speedBtn");
+
+    const gridSize = 20;              // cells per row/col
+    const cell = canvas.width / gridSize;
+
+    const speeds = [
+      { name: "Slow", ms: 140 },
+      { name: "Normal", ms: 100 },
+      { name: "Fast", ms: 70 }
+    ];
+    let speedIndex = 1;
+
+    let snake, dir, nextDir, food, score, best, loop, paused, alive;
+
+    best = Number(localStorage.getItem("snake_best") || 0);
+    bestEl.textContent = best;
+
+    function randCell() {
+      return {
+        x: Math.floor(Math.random() * gridSize),
+        y: Math.floor(Math.random() * gridSize)
+      };
+    }
+
+    function reset() {
+      snake = [{ x: 10, y: 10 }, { x: 9, y: 10 }, { x: 8, y: 10 }];
+      dir = "R";
+      nextDir = "R";
+      score = 0;
+      paused = false;
+      alive = true;
+      food = placeFood();
+      scoreEl.textContent = score;
+      draw();
+    }
+
+    function placeFood() {
+      let f;
+      do { f = randCell(); }
+      while (snake.some(s => s.x === f.x && s.y === f.y));
+      return f;
+    }
+
+    function step() {
+      if (!alive || paused) return;
+
+      dir = nextDir;
+      const head = { ...snake[0] };
+
+      if (dir === "U") head.y -= 1;
+      if (dir === "D") head.y += 1;
+      if (dir === "L") head.x -= 1;
+      if (dir === "R") head.x += 1;
+
+      // wall collision
+      if (head.x < 0 || head.y < 0 || head.x >= gridSize || head.y >= gridSize) {
+        return gameOver();
+      }
+
+      // self collision
+      if (snake.some(s => s.x === head.x && s.y === head.y)) {
+        return gameOver();
+      }
+
+      snake.unshift(head);
+
+      // eat
+      if (head.x === food.x && head.y === food.y) {
+        score++;
+        scoreEl.textContent = score;
+        if (score > best) {
+          best = score;
+          bestEl.textContent = best;
+          localStorage.setItem("snake_best", String(best));
+        }
+        food = placeFood();
+      } else {
+        snake.pop();
+      }
+
+      draw();
+    }
+
+    function gameOver() {
+      alive = false;
+      draw(true);
+      clearInterval(loop);
+      loop = null;
+    }
+
+    function draw(gameOverState = false) {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // grid (very light)
+      ctx.globalAlpha = 0.25;
+      for (let i = 0; i <= gridSize; i++) {
+        ctx.beginPath();
+        ctx.moveTo(i * cell, 0);
+        ctx.lineTo(i * cell, canvas.height);
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.moveTo(0, i * cell);
+        ctx.lineTo(canvas.width, i * cell);
+        ctx.stroke();
+      }
+      ctx.globalAlpha = 1;
+
+      // food
+      ctx.beginPath();
+      ctx.arc((food.x + 0.5) * cell, (food.y + 0.5) * cell, cell * 0.30, 0, Math.PI * 2);
+      ctx.fill();
+
+      // snake
+      snake.forEach((s, idx) => {
+        ctx.beginPath();
+        ctx.roundRect(s.x * cell + 3, s.y * cell + 3, cell - 6, cell - 6, 10);
+        ctx.fill();
+        // subtle head highlight
+        if (idx === 0) {
+          ctx.globalAlpha = 0.15;
+          ctx.beginPath();
+          ctx.roundRect(s.x * cell + 8, s.y * cell + 8, cell - 16, cell - 16, 10);
+          ctx.fill();
+          ctx.globalAlpha = 1;
+        }
+      });
+
+      // overlay text
+      if (gameOverState) {
+        ctx.globalAlpha = 0.9;
+        ctx.fillRect(0, canvas.height/2 - 60, canvas.width, 120);
+        ctx.globalAlpha = 1;
+        ctx.textAlign = "center";
+        ctx.font = "700 28px system-ui, -apple-system, Segoe UI, Roboto, Arial";
+        ctx.fillText("Game Over", canvas.width/2, canvas.height/2 - 6);
+        ctx.font = "500 14px system-ui, -apple-system, Segoe UI, Roboto, Arial";
+        ctx.fillText("Press Start/Restart to play again", canvas.width/2, canvas.height/2 + 22);
+      }
+
+      // paused indicator
+      if (paused && alive) {
+        ctx.globalAlpha = 0.55;
+        ctx.fillRect(0, canvas.height/2 - 40, canvas.width, 80);
+        ctx.globalAlpha = 1;
+        ctx.textAlign = "center";
+        ctx.font = "700 22px system-ui, -apple-system, Segoe UI, Roboto, Arial";
+        ctx.fillText("Paused", canvas.width/2, canvas.height/2 + 7);
+      }
+    }
+
+    function setDirection(d) {
+      // prevent reversing into yourself
+      const opposite = { U:"D", D:"U", L:"R", R:"L" };
+      if (opposite[dir] === d) return;
+      nextDir = d;
+    }
+
+    function start() {
+      reset();
+      clearInterval(loop);
+      loop = setInterval(step, speeds[speedIndex].ms);
+    }
+
+    function togglePause() {
+      if (!alive) return;
+      paused = !paused;
+      draw();
+      pauseBtn.textContent = paused ? "Resume" : "Pause";
+    }
+
+    function toggleSpeed() {
+      speedIndex = (speedIndex + 1) % speeds.length;
+      speedBtn.textContent = `Speed: ${speeds[speedIndex].name}`;
+      if (loop) {
+        clearInterval(loop);
+        loop = setInterval(step, speeds[speedIndex].ms);
+      }
+    }
+
+    // keyboard
+    window.addEventListener("keydown", (e) => {
+      const k = e.key.toLowerCase();
+      if (k === "arrowup" || k === "w") setDirection("U");
+      if (k === "arrowdown" || k === "s") setDirection("D");
+      if (k === "arrowleft" || k === "a") setDirection("L");
+      if (k === "arrowright" || k === "d") setDirection("R");
+      if (k === " ") togglePause();
+    });
+
+    // buttons
+    startBtn.addEventListener("click", start);
+    pauseBtn.addEventListener("click", togglePause);
+    speedBtn.addEventListener("click", toggleSpeed);
+
+    document.querySelectorAll("[data-dir]").forEach(btn => {
+      btn.addEventListener("click", () => setDirection(btn.dataset.dir));
+    });
+
+    // initial state
+    reset();
+    speedBtn.textContent = `Speed: ${speeds[speedIndex].name}`;
+  </script>
+</body>
+</html>

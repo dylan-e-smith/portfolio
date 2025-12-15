@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Interests | Cars</title>
+  <link rel="stylesheet" href="css/scratch.css" />
+</head>
+
+<body class="scratch">
+  <!-- Top Nav (DIV #1) -->
+  <div class="topbar" id="top">
+    <div class="wrap">
+      <div class="brand">Interests</div>
+      <div class="nav">
+        <a href="index.html">Home</a>
+        <a href="resume.html">Resume</a>
+        <a href="app.html">Snake</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Hero (DIV #2) -->
+  <div class="wrap">
+    <div class="hero">
+      <div class="hero-left">
+        <p class="pill">Passion: Working on cars</p>
+        <h1>Cars are the perfect systems hobby.</h1>
+        <p class="muted">
+          I like learning how parts interact, diagnosing problems, and seeing how small improvements change performance.
+          This page is built from scratch to demonstrate HTML + CSS requirements (lists, anchors, embeds, and layout).
+        </p>
+
+        <div class="anchor-links">
+          <a href="#lists">Lists</a>
+          <a href="#video">YouTube</a>
+          <a href="#tableau">Tableau</a>
+        </div>
+      </div>
+
+      <div class="hero-right">
+        <!-- Make sure this file exists: img/cars.jpg -->
+        <img class="hero-img" src="img/cars.jpg" alt="Cars / interests image" />
+        <p class="img-caption">Replace this image anytime — keep the filename the same to avoid broken links.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Lists Section (DIV #3) -->
+  <div class="wrap" id="lists">
+    <div class="grid">
+      <div class="card">
+        <h2>What I like doing</h2>
+
+        <!-- Ordered list containing unordered list (rubric requirement) -->
+        <ol>
+          <li>
+            Maintenance basics
+            <ul>
+              <li>Oil, filters, and fluids</li>
+              <li>Brakes and wear items</li>
+              <li>Battery + simple electrical checks</li>
+            </ul>
+          </li>
+          <li>
+            Diagnostics
+            <ul>
+              <li>Read symptoms and isolate causes</li>
+              <li>Test one variable at a time</li>
+              <li>Learn from mistakes and adjust</li>
+            </ul>
+          </li>
+          <li>
+            Long-term builds
+            <ul>
+              <li>Plan upgrades with a goal</li>
+              <li>Budget parts and prioritize</li>
+              <li>Track changes over time</li>
+            </ul>
+          </li>
+        </ol>
+
+        <a class="backtop" href="#top">Back to top ↑</a>
+      </div>
+
+      <div class="card">
+        <h2>Notes</h2>
+        <p class="muted">
+          I like cars because they’re practical and technical at the same time—there’s always something to learn,
+          optimize, or fix. It’s a hobby that rewards patience and good process.
+        </p>
+
+        <div class="mini-box">
+          <strong>Tip:</strong> On GitHub Pages, filenames must match exactly (case + spacing).
+        </div>
+
+        <div class="mini-box">
+          <strong>Navigation:</strong> This page links back to the professional pages and the snake game.
+        </div>
+
+        <a class="backtop" href="#top">Back to top ↑</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- YouTube Section -->
+  <div class="wrap" id="video">
+    <div class="card wide">
+      <h2>YouTube</h2>
+      <p class="muted">Embedded video (should play directly on your site).</p>
+
+      <div class="embed-shell">
+        <iframe
+          src="https://www.youtube-nocookie.com/embed/a5an53rid4w?rel=0"
+          title="YouTube video player"
+          frameborder="0"
+          referrerpolicy="strict-origin-when-cross-origin"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          allowfullscreen>
+        </iframe>
+      </div>
+
+      <a class="backtop" href="#top">Back to top ↑</a>
+    </div>
+  </div>
+
+  <!-- Tableau Section (Gold & Silver) -->
+  <div class="wrap" id="tableau">
+    <div class="card wide">
+      <h2>Tableau: Gold vs Silver Market</h2>
+      <p class="muted">Interactive Tableau Public embed (gold/silver comparison).</p>
+
+      <!-- Tableau Public embed (JS version is most reliable) -->
+      <div class="tableau-shell">
+        <div class="tableauPlaceholder" id="vizGoldSilver" style="position: relative;">
+          <noscript>
+            <a href="#">
+              <img alt="Gold vs Silver Dashboard"
+                   src="https://public.tableau.com/static/images/Av/AveragePriceGoldvSilver/Dashboard1/1_rss.png"
+                   style="border: none;" />
+            </a>
+          </noscript>
+
+          <object class="tableauViz" style="display:none;">
+            <param name="host_url" value="https%3A%2F%2Fpublic.tableau.com%2F" />
+            <param name="embed_code_version" value="3" />
+            <param name="site_root" value="" />
+            <param name="name" value="AveragePriceGoldvSilver/Dashboard1" />
+            <param name="tabs" value="no" />
+            <param name="toolbar" value="yes" />
+            <param name="static_image" value="https://public.tableau.com/static/images/Av/AveragePriceGoldvSilver/Dashboard1/1.png" />
+            <param name="animate_transition" value="yes" />
+            <param name="display_static_image" value="yes" />
+            <param name="display_spinner" value="yes" />
+            <param name="display_overlay" value="yes" />
+            <param name="display_count" value="yes" />
+            <param name="language" value="en-US" />
+          </object>
+        </div>
+      </div>
+
+      <div class="row-links">
+        <a href="app.html" class="btn-soft">Play Snake →</a>
+        <a href="index.html" class="btn-soft">Back to Home →</a>
+      </div>
+
+      <a class="backtop" href="#top">Back to top ↑</a>
+    </div>
+  </div>
+
+  <div class="footer">
+    <div class="wrap footer-inner">
+      <span>Built from scratch (HTML + CSS)</span>
+      <span class="muted">Anchors • Lists • Image • YouTube • Tableau</span>
+    </div>
+  </div>
+
+  <!-- Tableau loader script -->
+  <script src="https://public.tableau.com/javascripts/api/viz_v1.js"></script>
+  <script>
+    // Make the Tableau viz responsive
+    (function () {
+      const container = document.getElementById("vizGoldSilver");
+      const vizObj = container.getElementsByTagName("object")[0];
+
+      // Width fills the card
+      vizObj.style.width = "100%";
+
+      // Height: responsive-ish (you can tweak)
+      const w = container.offsetWidth;
+      const h = Math.max(520, Math.round(w * 0.62));
+      vizObj.style.height = h + "px";
+    })();
+  </script>
+</body>
+</html>
